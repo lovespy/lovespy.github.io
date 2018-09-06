@@ -3,7 +3,7 @@
     "lang": "af",
     "name": "Serguei's Portfolio",
     "scope": "/",
-    "display": "browser",
+	"display": "standalone",
     "start_url": "https://lovespy.github.io/",
     "short_name": "lovespy",
     "theme_color": "transparent",

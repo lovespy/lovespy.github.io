@@ -2,4 +2,4 @@
 # http://code.google.com/web/controlcrawlindex/
 User-agent: *
 Disallow:
-Sitemap: http://mytushino.github.io/sitemap.xml
+Sitemap: http://lovespy.github.io/sitemap.xml

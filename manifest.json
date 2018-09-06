@@ -6,10 +6,10 @@
 	"display": "standalone",
     "start_url": "https://lovespy.github.io/",
     "short_name": "lovespy",
-    "theme_color": "transparent",
+    "theme_color": "#56D3C7",
     "description": "A portfolio App",
     "orientation": "any",
-    "background_color": "transparent",
+    "background_color": "#56D3C7",
     "related_applications": [],
     "prefer_related_applications": false,
     "icons": [

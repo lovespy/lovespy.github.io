@@ -20,7 +20,7 @@ self.addEventListener('fetch', function(event) {
   var updateCache = function(request){
     return caches.open('pwabuilder-offline').then(function (cache) {
       return fetch(request).then(function (response) {
-        console.log('[PWA Builder] add page to offline: '+response.url)
+        console.log('[PWA Builder] Add page to offline: '+response.url)
         return cache.put(request, response);
       });
     });

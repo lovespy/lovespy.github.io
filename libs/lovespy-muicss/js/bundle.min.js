@@ -2395,7 +2395,11 @@ unescape, VK, WheelIndicator, Ya*/
 										360: 1
 									}
 								});
-							scroll2Top(0, 20000);
+							var timer = setTimeout(function () {
+									clearTimeout(timer);
+									timer = null;
+									scroll2Top(0, 20000);
+								}, 500);
 						}
 					};
 					if (img && !macyContainer[classList].contains(isActiveClass)) {

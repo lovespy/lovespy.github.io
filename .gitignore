@@ -7,3 +7,4 @@ maps/
 *.ai
 *.psd
 /libs/lovespy-muicss/img/lovespy-gallery
+.src

@@ -73,7 +73,7 @@
 	},
 	"main": "index.html",
 	"window": {
-		"title": "Serguei's Portfolio",
+		"title": "Портфолио lovespy",
 		"icon": "favicon-32x32.png",
 		"toolbar": true,
 		"frame": true,

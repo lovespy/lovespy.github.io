@@ -1,0 +1,80 @@
+{
+	"home": {
+		"url": "./includes/lovespy-muicss/home.html",
+		"title": "Начало"
+	},
+	"notfound": {
+		"url": "./includes/lovespy-muicss/notfound.html",
+		"title": "Страница не найдена"
+	},
+	"hashes": [{
+			"href": "#/home",
+			"url": "./includes/lovespy-muicss/home.html",
+			"title": "Начало"
+		}, {
+			"href": "#/authorities",
+			"url": "./includes/lovespy-muicss/authorities.html",
+			"title": "Чиновники"
+		}, {
+			"href": "#/pets_and_animals",
+			"url": "./includes/lovespy-muicss/pets_and_animals.html",
+			"title": "Домашние животные"
+		}, {
+			"href": "#/education",
+			"url": "./includes/lovespy-muicss/education.html",
+			"title": "Образование"
+		}, {
+			"href": "#/health_and_personal_care",
+			"url": "./includes/lovespy-muicss/health_and_personal_care.html",
+			"title": "Здоровье и красота"
+		}, {
+			"href": "#/sports_and_outdoors",
+			"url": "./includes/lovespy-muicss/sports_and_outdoors.html",
+			"title": "Спорт и отдых"
+		}, {
+			"href": "#/entertainment_and_media",
+			"url": "./includes/lovespy-muicss/entertainment_and_media.html",
+			"title": "Развлечения"
+		}, {
+			"href": "#/food_retail_and_service",
+			"url": "./includes/lovespy-muicss/food_retail_and_service.html",
+			"title": "Питание"
+		}, {
+			"href": "#/home_and_garden",
+			"url": "./includes/lovespy-muicss/home_and_garden.html",
+			"title": "Дом и сад"
+		}, {
+			"href": "#/toys_and_hobbies",
+			"url": "./includes/lovespy-muicss/toys_and_hobbies.html",
+			"title": "Игрушки и хобби"
+		}, {
+			"href": "#/services_other",
+			"url": "./includes/lovespy-muicss/services_other.html",
+			"title": "Другие услуги"
+		}, {
+			"href": "#/about",
+			"url": "./includes/lovespy-muicss/about.html",
+			"title": "Об этом ресурсе"
+		}, {
+			"href": "#/contacts",
+			"url": "./includes/lovespy-muicss/contacts.html",
+			"title": "Контакты"
+		}
+	],
+	"more": [{
+			"href": "mailto:englishextra2%40yahoo.com?subject=%D0%9F%D0%BE%D1%80%D1%82%D1%84%D0%BE%D0%BB%D0%B8%D0%BE%20lovespy.%20%D0%97%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%20%D1%81%D0%B0%D0%B9%D1%82&body=%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%B2%D0%B0%D1%88%D0%B5%D0%B9%20%D0%B4%D0%B5%D1%8F%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D0%B8%20%D0%B8%20%D1%86%D0%B5%D0%BB%D1%8C%20%D0%B1%D1%83%D0%B4%D1%83%D1%89%D0%B5%D0%B3%D0%BE%20%D1%80%D0%B5%D1%81%D1%83%D1%80%D1%81%D0%B0.%20%D0%92%D0%B0%D1%88%D0%B8%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D1%8B",
+			"title": "Заказать сайт"
+		}, {
+			"href": "mailto:englishextra2%40yahoo.com?subject=%D0%9F%D0%BE%D1%80%D1%82%D1%84%D0%BE%D0%BB%D0%B8%D0%BE%20lovespy.%20%D0%9F%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C%20%D1%81%D0%B0%D0%B9%D1%82&body=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%2C%20%D0%B0%D0%B4%D1%80%D0%B5%D1%81%20%28URL%29%20%D0%B2%D0%B0%D1%88%D0%B5%D0%B3%D0%BE%20%D1%80%D0%B5%D1%81%D1%83%D1%80%D1%81%D0%B0%20%D0%B8%20%D1%87%D1%82%D0%BE%20%D0%B4%D0%BE%D0%B1%D0%B0%D0%B2%D0%B8%D1%82%D1%8C%20%D0%B8%D0%BB%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B8%D1%82%D1%8C.%20%D0%92%D0%B0%D1%88%D0%B8%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D1%8B",
+			"title": "Править сайт"
+		}
+	],
+	"contacts": [{
+			"href": "https://vk.com/lovespy",
+			"title": "Паблик «ВК»"
+		}, {
+			"href": "tg://resolve?domain=lovespylovespy",
+			"title": "Телеграм"
+		}
+	]
+}

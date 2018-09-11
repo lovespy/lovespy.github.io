@@ -2400,7 +2400,7 @@ unescape, VK, WheelIndicator, Ya*/
 									clearTimeout(timer);
 									timer = null;
 									scroll2Top(0, 20000);
-								}, 500);
+								}, 1000);
 						}
 					};
 					if (img && !macyContainer[classList].contains(isActiveClass)) {

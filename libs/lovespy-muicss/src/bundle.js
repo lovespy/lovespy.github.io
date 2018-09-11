@@ -2637,13 +2637,12 @@ unescape, VK, WheelIndicator, Ya*/
 			}
 		};
 
-		/* if (supportsCanvas) {
+		if (supportsCanvas) {
 			slot = setInterval(checkFontIsLoaded, 100);
 		} else {
 			slot = null;
 			onFontsLoaded();
-		} */
-		onFontsLoaded();
+		}
 	};
 
 	loadCSS(

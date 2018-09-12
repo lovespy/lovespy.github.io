@@ -2399,9 +2399,9 @@ unescape, VK, WheelIndicator, Ya*/
 					this[classList].add("data-src-img");
 					if (imgCounter === imgLength) {
 						scroll2Top(1, 20000);
-						initMacy().then(function () {
+						initMacy()/* .then(function () {
 							handleDataSrcImageAll();
-						}).then(function () {
+						}) */.then(function () {
 							scroll2Top(0, 20000);
 						}).then(function () {
 							macyContainer[classList].add(isActiveClass);

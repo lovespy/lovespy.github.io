@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <!--
-1. dont use srcset
 2. lazyload images
 3. remove font face in critical inline css
 4. set font display swap in font face in css -->
@@ -16,12 +15,12 @@
 		<meta name="keywords" content="веб,разработка,дизайн,сайт,портфолио,фронтенд" />
 		<meta name="description" content="Портфолио lovespy" /><title>Портфолио lovespy</title>
 		<link rel="dns-prefetch" href="https://fonts.googleapis.com" /><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" /><link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" /><link rel="dns-prefetch" href="https://farm9.staticflickr.com" /><link rel="dns-prefetch" href="https://farm8.staticflickr.com" /><link rel="dns-prefetch" href="https://farm7.staticflickr.com" /><link rel="dns-prefetch" href="https://farm6.staticflickr.com" /><link rel="dns-prefetch" href="https://farm5.staticflickr.com" /><link rel="dns-prefetch" href="https://farm4.staticflickr.com" /><link rel="dns-prefetch" href="https://farm3.staticflickr.com" /><link rel="dns-prefetch" href="https://farm2.staticflickr.com" /><link rel="dns-prefetch" href="https://farm1.staticflickr.com" /><link rel="dns-prefetch" href="https://i.vimeocdn.com" /><link rel="dns-prefetch" href="https://f.vimeocdn.com" /><link rel="dns-prefetch" href="https://w.soundcloud.com" /><link rel="dns-prefetch" href="https://a.disquscdn.com" /><link rel="dns-prefetch" href="https://api-maps.yandex.ru" /><link rel="dns-prefetch" href="https://chart.googleapis.com" /><link rel="dns-prefetch" href="https://connect.mail.ru" /><link rel="dns-prefetch" href="https://connect.ok.ru" /><link rel="dns-prefetch" href="https://disqus.com" /><link rel="dns-prefetch" href="https://graph.facebook.com" /><link rel="dns-prefetch" href="https://mc.yandex.ru" /><link rel="dns-prefetch" href="https://www.google-analytics.com" /><link rel="dns-prefetch" href="https://yastatic.net" /><link rel="dns-prefetch" href="https://audiomack.com" /><link rel="dns-prefetch" href="https://api.audiomack.com" /><link rel="dns-prefetch" href="https://platform.twitter.com" /><link rel="dns-prefetch" href="https://www.instagram.com" />
+		<link rel="preconnect" href="https://mc.yandex.ru" />
+		<link rel="preconnect" href="https://www.google-analytics.com" />
 		<link rel="preload" href="https://lovespygithubio.disqus.com/embed.js" as="script" /><link rel="preload" href="https://yastatic.net/share2/share.js" as="script" /><link rel="preload" href="https://vk.com/js/api/openapi.js?154" as="script" /><link rel="preload" href="https://www.instagram.com/embed.js" as="script" /><link rel="preload" href="https://platform.twitter.com/widgets.js" as="script" />
 		<link rel="preload" href="./libs/lovespy-muicss/css/bundle.min.css" as="style" />
 		<link rel="preload" href="./libs/lovespy-muicss/css/vendors.min.css" as="style" />
 		<link rel="preload" href="./libs/lovespy-muicss/js/vendors.min.js" as="script" />
-		<link rel="preconnect" href="https://mc.yandex.ru" />
-		<link rel="preconnect" href="https://www.google-analytics.com" />
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -264,12 +263,9 @@
 				overflow: hidden;
 			}
 			.macy-container img {
-				display: none;
+				display: block;
 				width: 100%;
 				height: auto;
-			}
-			.macy-container.is-active img {
-				display: block;
 			}
 		</style>
 		<noscript>
@@ -622,7 +618,7 @@
 			</template>
 		</div>
 		<div class="holder-share-buttons" aria-hidden="true"><div id="ya-share2" data-direction="horizontal" data-services="vkontakte,odnoklassniki,facebook,whatsapp,pocket"></div></div>
-		<div class="holder-vk-like" aria-hidden="true"><div class="vk-like" id="vk-like" data-apiid="6626630"></div></div>
+		<div class="holder-vk-like" aria-hidden="true"><div class="vk-like" id="vk-like" data-apiid="6690218"></div></div>
 		<div class="half-circle-spinner" id="loading-spinner" aria-hidden="true">
 			<div class="circle circle-1"></div>
 			<div class="circle circle-2"></div>

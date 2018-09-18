@@ -12,45 +12,9 @@
 			"url": "./includes/lovespy-muicss/home.html",
 			"title": "Начало"
 		}, {
-			"href": "#/authorities",
-			"url": "./includes/lovespy-muicss/authorities.html",
-			"title": "Чиновники"
-		}, {
-			"href": "#/pets_and_animals",
-			"url": "./includes/lovespy-muicss/pets_and_animals.html",
-			"title": "Домашние животные"
-		}, {
-			"href": "#/education",
-			"url": "./includes/lovespy-muicss/education.html",
-			"title": "Образование"
-		}, {
-			"href": "#/health_and_personal_care",
-			"url": "./includes/lovespy-muicss/health_and_personal_care.html",
-			"title": "Здоровье и красота"
-		}, {
-			"href": "#/sports_and_outdoors",
-			"url": "./includes/lovespy-muicss/sports_and_outdoors.html",
-			"title": "Спорт и отдых"
-		}, {
-			"href": "#/entertainment_and_media",
-			"url": "./includes/lovespy-muicss/entertainment_and_media.html",
-			"title": "Развлечения"
-		}, {
-			"href": "#/food_retail_and_service",
-			"url": "./includes/lovespy-muicss/food_retail_and_service.html",
-			"title": "Питание"
-		}, {
-			"href": "#/home_and_garden",
-			"url": "./includes/lovespy-muicss/home_and_garden.html",
-			"title": "Дом и сад"
-		}, {
-			"href": "#/toys_and_hobbies",
-			"url": "./includes/lovespy-muicss/toys_and_hobbies.html",
-			"title": "Игрушки и хобби"
-		}, {
-			"href": "#/services_other",
-			"url": "./includes/lovespy-muicss/services_other.html",
-			"title": "Другие услуги"
+			"href": "#/pictures",
+			"url": "./includes/lovespy-muicss/pictures.html",
+			"title": "Мои фото"
 		}, {
 			"href": "#/about",
 			"url": "./includes/lovespy-muicss/about.html",

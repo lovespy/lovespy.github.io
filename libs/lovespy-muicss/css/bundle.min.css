@@ -2016,30 +2016,30 @@ img.office-qrcode-img {
  * make appbar dark
  */
 
-/* .mui-appbar {
+.mui-appbar {
 	color: #FFFFFF;
-	background-color: $ButtonBackgroundDark;
+	background-color: #2B2B2B;
 }
 
 .mui-appbar .mui-dropdown__menu > li > a {
 	color: #FFFFFF;
-	background-color: $ButtonBackgroundDark;
+	background-color: #2B2B2B;
 }
 
 .mui-appbar .mui-dropdown__menu > li > a:focus,
 .mui-appbar .mui-dropdown__menu > li > a:hover,
 .mui-appbar .mui-dropdown__menu > li > a:active {
-	color: $ButtonBackgroundDark;
-	background-color: $custom-color-highlight-hover;
-} */
+	color: #2B2B2B;
+	background-color: #6DD4F9;
+}
 
 /*!
  * make sidedrawer dark
  */
 
-/* #sidedrawer {
+#sidedrawer {
 	color: #FFFFFF;
-	background-color: $clr-grey-800;
+	background-color: #424242;
 }
 
 #sidedrawer li a:focus,
@@ -2049,5 +2049,5 @@ img.office-qrcode-img {
 #sidedrawer li > strong:focus,
 #sidedrawer li > strong:hover,
 #sidedrawer li > strong:active {
-	color: $clr-grey-800;
-} */
+	color: #424242;
+}

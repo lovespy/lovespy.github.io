@@ -205,6 +205,7 @@
 			/*!
 			 * hide before scripts and styles loaded
 			 */
+			.macy-container,
 			.card-grid,
 			#sidedrawer,
 			#header,
@@ -212,6 +213,11 @@
 			#page {
 				visibility: hidden;
 				opacity: 0;
+			}
+			.macy-container,
+			.card-grid.is-active {
+				visibility: visible;
+				opacity: 1;
 			}
 			template,
 			#sidedrawer li > strong + ul,
@@ -235,36 +241,6 @@
 			.holder-vk-like {
 				display: none;
 			}
-			/*!
-			 * intro
-			 */
-			.intro {
-				width: 100%;
-				height: 100%;
-				min-height: 100%;
-				position: absolute;
-				background-color: transparent;
-				/*overflow-y: hidden;*/
-			}
-			.macy-container {
-				visibility: hidden;
-				opacity: 0;
-				color: transparent;
-				-webkit-transition: visibility 0s, opacity 0.2s ease;
-				transition: visibility 0s, opacity 0.2s ease;
-			}
-			.macy-container.is-active {
-				visibility: visible;
-				opacity: 1;
-			}
-			.macy-container a {
-				overflow: hidden;
-			}
-			.macy-container img {
-				display: block;
-				width: 100%;
-				height: auto;
-			}
 		</style>
 		<noscript>
 			<link rel="stylesheet" href="./libs/lovespy-muicss/css/vendors.min.css" />
@@ -274,6 +250,7 @@
 				.hollow-dots-spinner {
 					display: none;
 				}
+				.macy-container,
 				.card-grid,
 				#sidedrawer,
 				#header,
@@ -292,6 +269,7 @@
 		<script>
 			(function(){return (function templatePolyfill(){"use strict";if("content"in document.createElement("template")){return false;}var templates=document.getElementsByTagName("template");var plateLen=templates.length;for(var x=0;x<plateLen;++x){var template=templates[x];var content=template.childNodes;var fragment=document.createDocumentFragment();while(content[0]){fragment.appendChild(content[0]);}template.content=fragment;}}());})();
 			var imagesPreloaded=false;(function(m){m="[object Array]"===Object.prototype.toString.apply(m)?m:[m];var t=function(){return (imagesPreloaded=true);},f=function(){return (imagesPreloaded=false);},c=[];for(var i=0,l=m.length;i<l;i++){c[i]=new Image();c[i].onabort=f;c[i].onerror=f;c[i].onload=t;c[i].src=m[i];}}([
+"./image_src.jpg",
 "./libs/lovespy-muicss/img/works-screenshots/@1x/build.phonegap.com-apps-1824701-share.jpg",
 "./libs/lovespy-muicss/img/works-screenshots/@1x/englishextra.github.io-403-html.jpg",
 "./libs/lovespy-muicss/img/works-screenshots/@1x/englishextra.github.io-404-html.jpg",

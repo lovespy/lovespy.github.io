@@ -19,7 +19,12 @@ self.addEventListener("install", function(event) {
 self.addEventListener("fetch", function(event) {
 	var updateCache = function(request) {
 		return caches.open("lovespy-offline").then(function(cache) {
-			return fetch(request).then(function(response) {
+			/*!
+			 * @see {@link https://github.com/pwa-builder/serviceworkers/issues/16#issuecomment-388215410}
+			 * @see {@link https://github.com/icarito/serviceworkers/commit/f17f892ba9f2be057aeffa133f01f243604ddc0c}
+			 */
+			//return fetch(request).then(function(response) {
+			return fetch(request.clone()).then(function(response) {
 				console.log("[sw.js] Add page to offline: " + response.url);
 				return cache.put(request, response);
 			});

@@ -14,7 +14,10 @@ module.exports = {
 				"./bower_components/qrjs2/qrjs2.js",
 				//"../../cdn/qrjs2/0.1.6/js/qrjs2.fixed.js",
 				"./node_modules/wolfy87-eventemitter/EventEmitter.js",
-				"../../cdn/resize/1.0.0/js/any-resize-event.fixed.js",
+				//"../../cdn/EventEmitter/5.2.5/js/EventEmitter.fixed.js",
+				"./node_modules/any-resize-event/dist/any-resize-event.js",
+				//"../../cdn/resize/1.0.0/js/any-resize-event.fixed.js",
+				//"./node_modules/minigrid/dist/minigrid.min.js",
 				"../../cdn/minigrid/3.1.1/js/minigrid.fixed.js",
 				"./node_modules/macy/dist/macy.js",
 				//"../../cdn/macy.js/2.3.1/js/macy.fixed.js",
@@ -22,13 +25,13 @@ module.exports = {
 				"./node_modules/mustache/mustache.js",
 				//"../../cdn/mustache/2.3.0/js/mustache.fixed.js",
 				"../../cdn/ReadMore.js/1.0.0/js/readMoreJS.fixed.js",
-				"../../cdn/ripple-js/1.4.4/js/ripple.fixed.js"
+				"../../cdn/ripple-js/1.4.4/js/ripple.fixed.js",
 				//"../../cdn/highlight.js/9.12.0/js/highlight.pack.fixed.js",
 				"./bower_components/wheel-indicator/lib/wheel-indicator.js",
 				//"../../cdn/wheel-indicator/1.1.4/js/wheel-indicator.fixed.js",
 				//"./bower_components/verge/verge.js",
 				//"../../cdn/verge/1.9.1/js/verge.fixed.js",
-				"./bower_components/Tocca.js/Tocca.js",
+				"./bower_components/Tocca.js/Tocca.js"
 				//"../../cdn/Tocca.js/2.0.1/js/Tocca.fixed.js"
 			],
 			"options": {
@@ -53,7 +56,10 @@ module.exports = {
 				"./bower_components/qrjs2/qrjs2.js",
 				//"../../cdn/qrjs2/0.1.6/js/qrjs2.fixed.js",
 				"./node_modules/wolfy87-eventemitter/EventEmitter.js",
-				"../../cdn/resize/1.0.0/js/any-resize-event.fixed.js",
+				//"../../cdn/EventEmitter/5.2.5/js/EventEmitter.fixed.js",
+				"./node_modules/any-resize-event/dist/any-resize-event.js",
+				//"../../cdn/resize/1.0.0/js/any-resize-event.fixed.js",
+				//"./node_modules/minigrid/dist/minigrid.min.js",
 				"../../cdn/minigrid/3.1.1/js/minigrid.fixed.js",
 				"./node_modules/macy/dist/macy.js",
 				//"../../cdn/macy.js/2.3.1/js/macy.fixed.js",
@@ -61,13 +67,13 @@ module.exports = {
 				"./node_modules/mustache/mustache.js",
 				//"../../cdn/mustache/2.3.0/js/mustache.fixed.js",
 				"../../cdn/ReadMore.js/1.0.0/js/readMoreJS.fixed.js",
-				"../../cdn/ripple-js/1.4.4/js/ripple.fixed.js"
+				"../../cdn/ripple-js/1.4.4/js/ripple.fixed.js",
 				//"../../cdn/highlight.js/9.12.0/js/highlight.pack.fixed.js",
 				"./bower_components/wheel-indicator/lib/wheel-indicator.js",
 				//"../../cdn/wheel-indicator/1.1.4/js/wheel-indicator.fixed.js",
 				//"./bower_components/verge/verge.js",
 				//"../../cdn/verge/1.9.1/js/verge.fixed.js",
-				"./bower_components/Tocca.js/Tocca.js",
+				"./bower_components/Tocca.js/Tocca.js"
 				//"../../cdn/Tocca.js/2.0.1/js/Tocca.fixed.js"
 			],
 			"options": {

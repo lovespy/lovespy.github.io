@@ -1089,510 +1089,6 @@
 /*jshint sub: false */
 /*jshint +W041 */
 
-/**
- * Generates event when user makes new movement (like a swipe on a touchscreen).
- * @version 1.2.0
- * @link https://github.com/Promo/wheel-indicator
- * @license MIT
- */
-
-/* global module, window, document */
-
-var WheelIndicator = (function() {
-    function Module(options) {
-        var DEFAULTS = {
-            callback: function(){},
-            elem: document,
-            preventMouse: true
-        };
-
-        this.eventWheel = 'onwheel' in document ? 'wheel' : 'mousewheel';
-        this._options = extend(DEFAULTS, options);
-        this._deltaArray = [ 0, 0, 0 ];
-        this._isAcceleration = false;
-        this._isStopped = true;
-        this._direction = '';
-        this._timer = '';
-        this._isWorking = true;
-
-        var self = this;
-        this._wheelHandler = function(event) {
-            if (self._isWorking) {
-                processDelta.call(self, event);
-
-                if (self._options.preventMouse) {
-                    preventDefault(event);
-                }
-            }
-        };
-
-        addEvent(this._options.elem, this.eventWheel, this._wheelHandler);
-    }
-
-    Module.prototype = {
-        constructor: Module,
-
-        turnOn: function(){
-            this._isWorking = true;
-
-            return this;
-        },
-
-        turnOff: function(){
-            this._isWorking = false;
-
-            return this;
-        },
-
-        setOptions: function(options){
-            this._options = extend(this._options, options);
-
-            return this;
-        },
-
-        getOption: function(option){
-            var neededOption = this._options[option];
-
-            if (neededOption !== undefined) {
-                return neededOption;
-            }
-
-            throw new Error('Unknown option');
-        },
-
-        destroy: function(){
-            removeEvent(this._options.elem, this.eventWheel, this._wheelHandler);
-
-            return this;
-        }
-    };
-
-    function triggerEvent(event){
-        event.direction = this._direction;
-
-        this._options.callback.call(this, event);
-    }
-
-    var getDeltaY = function(event){
-        if (event.wheelDelta && !event.deltaY) {
-            getDeltaY = function(event) {
-                return event.wheelDelta * -1;
-            };
-        } else {
-            getDeltaY = function(event) {
-                return event.deltaY;
-            };
-        }
-
-        return getDeltaY(event);
-    };
-
-    function preventDefault(event){
-        event = event || window.event;
-
-        if (event.preventDefault) {
-            event.preventDefault();
-        } else {
-            event.returnValue = false;
-        }
-    }
-
-    function processDelta(event) {
-        var
-            self = this,
-            delta = getDeltaY(event);
-
-        if (delta === 0) return;
-
-        var direction = delta > 0 ? 'down' : 'up',
-            arrayLength = self._deltaArray.length,
-            changedDirection = false,
-            repeatDirection = 0,
-            sustainableDirection, i;
-
-        clearTimeout(self._timer);
-
-        self._timer = setTimeout(function() {
-            self._deltaArray = [ 0, 0, 0 ];
-            self._isStopped = true;
-            self._direction = direction;
-        }, 150);
-
-        //check how many of last three deltas correspond to certain direction
-        for(i = 0; i < arrayLength; i++) {
-            if(self._deltaArray[i] !== 0) {
-                self._deltaArray[i] > 0 ? ++repeatDirection : --repeatDirection;
-            }
-        }
-
-        //if all of last three deltas is greater than 0 or lesser than 0 then direction is switched
-        if (Math.abs(repeatDirection) === arrayLength) {
-            //determine type of sustainable direction
-            //(three positive or negative deltas in a row)
-            sustainableDirection = repeatDirection > 0 ? 'down' : 'up';
-
-            if(sustainableDirection !== self._direction) {
-                //direction is switched
-                changedDirection = true;
-                self._direction = direction;
-            }
-        }
-
-        //if wheel`s moving and current event is not the first in array
-        if (!self._isStopped){
-            if(changedDirection) {
-                self._isAcceleration = true;
-
-                triggerEvent.call(this, event);
-            } else {
-                //check only if movement direction is sustainable
-                if(Math.abs(repeatDirection) === arrayLength) {
-                    //must take deltas to don`t get a bug
-                    //[-116, -109, -103]
-                    //[-109, -103, 1] - new impulse
-
-                    analyzeArray.call(this, event);
-                }
-            }
-        }
-
-        //if wheel is stopped and current delta value is the first in array
-        if (self._isStopped) {
-            self._isStopped = false;
-            self._isAcceleration = true;
-            self._direction = direction;
-
-            triggerEvent.call(this, event);
-        }
-
-        self._deltaArray.shift();
-        self._deltaArray.push(delta);
-    }
-
-    function analyzeArray(event) {
-        var
-            deltaArray0Abs  = Math.abs(this._deltaArray[0]),
-            deltaArray1Abs  = Math.abs(this._deltaArray[1]),
-            deltaArray2Abs  = Math.abs(this._deltaArray[2]),
-            deltaAbs        = Math.abs(getDeltaY(event));
-
-        if((deltaAbs       > deltaArray2Abs) &&
-            (deltaArray2Abs > deltaArray1Abs) &&
-            (deltaArray1Abs > deltaArray0Abs)) {
-
-            if(!this._isAcceleration) {
-                triggerEvent.call(this, event);
-                this._isAcceleration = true;
-            }
-        }
-
-        if((deltaAbs < deltaArray2Abs) &&
-            (deltaArray2Abs <= deltaArray1Abs)) {
-            this._isAcceleration = false;
-        }
-    }
-
-    function addEvent(elem, type, handler){
-        if(elem.addEventListener) {
-            elem.addEventListener(type, handler, false);
-        } else if (elem.attachEvent) {
-            elem.attachEvent('on' + type, handler);
-        }
-    }
-
-    function removeEvent(elem, type, handler) {
-        if (elem.removeEventListener) {
-            elem.removeEventListener(type, handler, false);
-        } else if (elem.detachEvent) {
-            elem.detachEvent('on'+ type, handler);
-        }
-    }
-
-    function extend(defaults, options) {
-        var extended = {},
-            prop;
-
-        for (prop in defaults) {
-            if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
-                extended[prop] = defaults[prop];
-            }
-        }
-
-        for (prop in options) {
-            if (Object.prototype.hasOwnProperty.call(options, prop)) {
-                extended[prop] = options[prop];
-            }
-        }
-
-        return extended;
-    }
-
-    return Module;
-}());
-
-if (typeof exports === 'object') {
-    module.exports = WheelIndicator;
-}
-
-/**
- *
- * Version: 2.0.1
- * Author: Gianluca Guarini
- * Contact: gianluca.guarini@gmail.com
- * Website: http://www.gianlucaguarini.com/
- * Twitter: @gianlucaguarini
- *
- * Copyright (c) Gianluca Guarini
- *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- **/
-/* global jQuery */
-(function(doc, win) {
-  if (typeof doc.createEvent !== 'function') return false // no tap events here
-  // helpers
-  var pointerEvent = function(type) {
-      var lo = type.toLowerCase(),
-        ms = 'MS' + type
-      return navigator.msPointerEnabled ? ms : window.PointerEvent ? lo : false
-    },
-    touchEvent = function(name) {
-      return 'on' + name in window ? name : false
-    },
-    defaults = {
-      useJquery: !win.IGNORE_JQUERY && typeof jQuery !== 'undefined',
-      swipeThreshold: win.SWIPE_THRESHOLD || 100,
-      tapThreshold: win.TAP_THRESHOLD || 150, // range of time where a tap event could be detected
-      dbltapThreshold: win.DBL_TAP_THRESHOLD || 200, // delay needed to detect a double tap
-      longtapThreshold: win.LONG_TAP_THRESHOLD || 1000, // delay needed to detect a long tap
-      tapPrecision: win.TAP_PRECISION / 2 || 60 / 2, // touch events boundaries ( 60px by default )
-      justTouchEvents: win.JUST_ON_TOUCH_DEVICES
-    },
-    // was initially triggered a "touchstart" event?
-    wasTouch = false,
-    touchevents = {
-      touchstart: touchEvent('touchstart') || pointerEvent('PointerDown'),
-      touchend: touchEvent('touchend') || pointerEvent('PointerUp'),
-      touchmove: touchEvent('touchmove') || pointerEvent('PointerMove')
-    },
-    isTheSameFingerId = function(e) {
-      return !e.pointerId || typeof pointerId === 'undefined' || e.pointerId === pointerId
-    },
-    setListener = function(elm, events, callback) {
-      var eventsArray = events.split(' '),
-        i = eventsArray.length
-
-      while (i--) {
-        elm.addEventListener(eventsArray[i], callback, false)
-      }
-    },
-    getPointerEvent = function(event) {
-      return event.targetTouches ? event.targetTouches[0] : event
-    },
-    getTimestamp = function () {
-      return new Date().getTime()
-    },
-    sendEvent = function(elm, eventName, originalEvent, data) {
-      var customEvent = doc.createEvent('Event')
-      customEvent.originalEvent = originalEvent
-      data = data || {}
-      data.x = currX
-      data.y = currY
-      data.distance = data.distance
-
-      // jquery
-      if (defaults.useJquery) {
-        customEvent = jQuery.Event(eventName, {originalEvent: originalEvent})
-        jQuery(elm).trigger(customEvent, data)
-      }
-
-      // addEventListener
-      if (customEvent.initEvent) {
-        for (var key in data) {
-          customEvent[key] = data[key]
-        }
-
-        customEvent.initEvent(eventName, true, true)
-        elm.dispatchEvent(customEvent)
-      }
-
-      // detect all the inline events
-      // also on the parent nodes
-      while (elm) {
-        // inline
-        if (elm['on' + eventName])
-          elm['on' + eventName](customEvent)
-        elm = elm.parentNode
-      }
-
-    },
-
-    onTouchStart = function(e) {
-      /**
-       * Skip all the mouse events
-       * events order:
-       * Chrome:
-       *   touchstart
-       *   touchmove
-       *   touchend
-       *   mousedown
-       *   mousemove
-       *   mouseup <- this must come always after a "touchstart"
-       *
-       * Safari
-       *   touchstart
-       *   mousedown
-       *   touchmove
-       *   mousemove
-       *   touchend
-       *   mouseup <- this must come always after a "touchstart"
-       */
-
-      if (!isTheSameFingerId(e)) return
-
-      pointerId = e.pointerId
-
-      // it looks like it was a touch event!
-      if (e.type !== 'mousedown')
-        wasTouch = true
-
-      // skip this event we don't need to track it now
-      if (e.type === 'mousedown' && wasTouch) return
-
-      var pointer = getPointerEvent(e)
-
-      // caching the current x
-      cachedX = currX = pointer.pageX
-      // caching the current y
-      cachedY = currY = pointer.pageY
-
-      longtapTimer = setTimeout(function() {
-        sendEvent(e.target, 'longtap', e)
-        target = e.target
-      }, defaults.longtapThreshold)
-
-      // we will use these variables on the touchend events
-      timestamp = getTimestamp()
-
-      tapNum++
-
-    },
-    onTouchEnd = function(e) {
-
-      if (!isTheSameFingerId(e)) return
-
-      pointerId = undefined
-
-      // skip the mouse events if previously a touch event was dispatched
-      // and reset the touch flag
-      if (e.type === 'mouseup' && wasTouch) {
-        wasTouch = false
-        return
-      }
-
-      var eventsArr = [],
-        now = getTimestamp(),
-        deltaY = cachedY - currY,
-        deltaX = cachedX - currX
-
-      // clear the previous timer if it was set
-      clearTimeout(dblTapTimer)
-      // kill the long tap timer
-      clearTimeout(longtapTimer)
-
-      if (deltaX <= -defaults.swipeThreshold)
-        eventsArr.push('swiperight')
-
-      if (deltaX >= defaults.swipeThreshold)
-        eventsArr.push('swipeleft')
-
-      if (deltaY <= -defaults.swipeThreshold)
-        eventsArr.push('swipedown')
-
-      if (deltaY >= defaults.swipeThreshold)
-        eventsArr.push('swipeup')
-
-      if (eventsArr.length) {
-        for (var i = 0; i < eventsArr.length; i++) {
-          var eventName = eventsArr[i]
-          sendEvent(e.target, eventName, e, {
-            distance: {
-              x: Math.abs(deltaX),
-              y: Math.abs(deltaY)
-            }
-          })
-        }
-        // reset the tap counter
-        tapNum = 0
-      } else {
-
-        if (
-          cachedX >= currX - defaults.tapPrecision &&
-          cachedX <= currX + defaults.tapPrecision &&
-          cachedY >= currY - defaults.tapPrecision &&
-          cachedY <= currY + defaults.tapPrecision
-        ) {
-          if (timestamp + defaults.tapThreshold - now >= 0)
-          {
-            // Here you get the Tap event
-            sendEvent(e.target, tapNum >= 2 && target === e.target ? 'dbltap' : 'tap', e)
-            target= e.target
-          }
-        }
-
-        // reset the tap counter
-        dblTapTimer = setTimeout(function() {
-          tapNum = 0
-        }, defaults.dbltapThreshold)
-
-      }
-    },
-    onTouchMove = function(e) {
-      if (!isTheSameFingerId(e)) return
-      // skip the mouse move events if the touch events were previously detected
-      if (e.type === 'mousemove' && wasTouch) return
-
-      var pointer = getPointerEvent(e)
-      currX = pointer.pageX
-      currY = pointer.pageY
-    },
-    tapNum = 0,
-    pointerId, currX, currY, cachedX, cachedY, timestamp, target, dblTapTimer, longtapTimer
-
-  //setting the events listeners
-  // we need to debounce the callbacks because some devices multiple events are triggered at same time
-  setListener(doc, touchevents.touchstart + (defaults.justTouchEvents ? '' : ' mousedown'), onTouchStart)
-  setListener(doc, touchevents.touchend + (defaults.justTouchEvents ? '' : ' mouseup'), onTouchEnd)
-  setListener(doc, touchevents.touchmove + (defaults.justTouchEvents ? '' : ' mousemove'), onTouchMove)
-
-  // Configure the tocca default options at any time
-  win.tocca = function(options) {
-    for (var opt in options) {
-      defaults[opt] = options[opt]
-    }
-
-    return defaults
-  }
-})(document, window)
-
 /*!
  * EventEmitter v5.2.5 - git.io/ee
  * Unlicense - http://unlicense.org/
@@ -2081,241 +1577,15 @@ if (typeof exports === 'object') {
 }(typeof window !== 'undefined' ? window : this || {}));
 
 /*!
-LegoMushroom @legomushroom http://legomushroom.com
-MIT License 2014
+  LegoMushroom @legomushroom http://legomushroom.com
+  MIT License 2014
  */
-/*jshint -W083 */
-(function () {
-	var Main;
-	Main = (function () {
-		function Main(o) {
-			this.o = o !== null ? o : {};
-			if (window.isAnyResizeEventInited) {
-				return;
-			}
-			this.vars();
-			this.redefineProto();
-		}
-		Main.prototype.vars = function () {
-			window.isAnyResizeEventInited = true;
-			this.allowedProtos = [HTMLDivElement, HTMLFormElement, HTMLLinkElement, HTMLBodyElement, HTMLParagraphElement, HTMLFieldSetElement, HTMLLegendElement, HTMLLabelElement, HTMLButtonElement, HTMLUListElement, HTMLOListElement, HTMLLIElement, HTMLHeadingElement, HTMLQuoteElement, HTMLPreElement, HTMLBRElement, HTMLFontElement, HTMLHRElement, HTMLModElement, HTMLParamElement, HTMLMapElement, HTMLTableElement, HTMLTableCaptionElement, HTMLImageElement, HTMLTableCellElement, HTMLSelectElement, HTMLInputElement, HTMLTextAreaElement, HTMLAnchorElement, HTMLObjectElement, HTMLTableColElement, HTMLTableSectionElement, HTMLTableRowElement];
-			return (this.timerElements = {
-					img: 1,
-					textarea: 1,
-					input: 1,
-					embed: 1,
-					object: 1,
-					svg: 1,
-					canvas: 1,
-					tr: 1,
-					tbody: 1,
-					thead: 1,
-					tfoot: 1,
-					a: 1,
-					select: 1,
-					option: 1,
-					optgroup: 1,
-					dl: 1,
-					dt: 1,
-					br: 1,
-					basefont: 1,
-					font: 1,
-					col: 1,
-					iframe: 1
-				});
-		};
-		Main.prototype.redefineProto = function () {
-			var i,
-			it,
-			proto,
-			t;
-			it = this;
-			return (t = (function () {
-					var _i,
-					_len,
-					_ref,
-					_results;
-					_ref = this.allowedProtos;
-					_results = [];
-					for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-						proto = _ref[i];
-						if (proto.prototype === null) {
-							continue;
-						}
-						_results.push((function (proto) {
-								var listener,
-								remover;
-								listener = proto.prototype.addEventListener || proto.prototype.attachEvent;
-								var wrappedListener;
-								(function (listener) {
-									wrappedListener = function () {
-										var option;
-										if (this !== window || this !== document) {
-											option = arguments[0] === 'onresize' && !this.isAnyResizeEventInited;
-											if (option) {
-												it.handleResize({
-													args: arguments,
-													that: this
-												});
-											}
-
-										}
-										return listener.apply(this, arguments);
-									};
-									if (proto.prototype.addEventListener) {
-										return (proto.prototype.addEventListener = wrappedListener);
-									} else if (proto.prototype.attachEvent) {
-										return (proto.prototype.attachEvent = wrappedListener);
-									}
-								})(listener);
-								remover = proto.prototype.removeEventListener || proto.prototype.detachEvent;
-								return (function (remover) {
-									var wrappedRemover;
-									wrappedRemover = function () {
-										this.isAnyResizeEventInited = false;
-										if (this.iframe) {
-											this.removeChild(this.iframe);
-										}
-										return remover.apply(this, arguments);
-									};
-									if (proto.prototype.removeEventListener) {
-										return (proto.prototype.removeEventListener = wrappedRemover);
-									} else if (proto.prototype.detachEvent) {
-										return (proto.prototype.detachEvent = wrappedListener);
-									}
-								})(remover);
-							})(proto));
-					}
-					return _results;
-				}).call(this));
-		};
-		Main.prototype.handleResize = function (args) {
-			var computedStyle,
-			el,
-			iframe,
-			isEmpty,
-			isStatic,
-			_ref;
-			el = args.that;
-			if (!this.timerElements[el.tagName.toLowerCase()]) {
-				iframe = document.createElement('iframe');
-				el.appendChild(iframe);
-				iframe.style.width = '100%';
-				iframe.style.height = '100%';
-				iframe.style.position = 'absolute';
-				iframe.style.zIndex = -999;
-				iframe.style.opacity = 0;
-				iframe.style.top = 0;
-				iframe.style.left = 0;
-				computedStyle = window.getComputedStyle ? getComputedStyle(el) : el.currentStyle;
-				isStatic = computedStyle.position === 'static' && el.style.position === '';
-				isEmpty = computedStyle.position === '' && el.style.position === '';
-				if (isStatic || isEmpty) {
-					el.style.position = 'relative';
-				}
-				if ((_ref = iframe.contentWindow) !== null) {
-					_ref.onresize = (function (_this) {
-						return function (e) {
-							return _this.dispatchEvent(el);
-						};
-					})(this);
-				}
-				el.iframe = iframe;
-			} else {
-				this.initTimer(el);
-			}
-			return (el.isAnyResizeEventInited = true);
-		};
-		Main.prototype.initTimer = function (el) {
-			var height,
-			width;
-			width = 0;
-			height = 0;
-			return (this.interval = setInterval((function (_this) {
-							return function () {
-								var newHeight,
-								newWidth;
-								newWidth = el.offsetWidth;
-								newHeight = el.offsetHeight;
-								if (newWidth !== width || newHeight !== height) {
-									_this.dispatchEvent(el);
-									width = newWidth;
-									return (height = newHeight);
-								}
-							};
-						})(this), this.o.interval || 62.5));
-		};
-		Main.prototype.dispatchEvent = function (el) {
-			var e;
-			if (document.createEvent) {
-				e = document.createEvent('HTMLEvents');
-				e.initEvent('onresize', false, false);
-				return el.dispatchEvent(e);
-			} else if (document.createEventObject) {
-				e = document.createEventObject();
-				return el.fireEvent('onresize', e);
-			} else {
-				return false;
-			}
-		};
-		Main.prototype.destroy = function () {
-			var i,
-			it,
-			proto,
-			_i,
-			_len,
-			_ref,
-			_results;
-			clearInterval(this.interval);
-			this.interval = null;
-			window.isAnyResizeEventInited = false;
-			it = this;
-			_ref = this.allowedProtos;
-			_results = [];
-			for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-				proto = _ref[i];
-				if (proto.prototype === null) {
-					continue;
-				}
-				_results.push((function (proto) {
-						var listener;
-						listener = proto.prototype.addEventListener || proto.prototype.attachEvent;
-						if (proto.prototype.addEventListener) {
-							proto.prototype.addEventListener = Element.prototype.addEventListener;
-						} else if (proto.prototype.attachEvent) {
-							proto.prototype.attachEvent = Element.prototype.attachEvent;
-						}
-						if (proto.prototype.removeEventListener) {
-							return (proto.prototype.removeEventListener = Element.prototype.removeEventListener);
-						} else if (proto.prototype.detachEvent) {
-							return (proto.prototype.detachEvent = Element.prototype.detachEvent);
-						}
-					})(proto));
-			}
-			return _results;
-		};
-		return Main;
-	})();
-	if ((typeof define === "function") && define.amd) {
-		define("any-resize-event", [], function () {
-			return new Main();
-		});
-	} else if ((typeof module === "object") && (typeof module.exports === "object")) {
-		module.exports = new Main();
-	} else {
-		if (typeof window !== "undefined" && window !== null) {
-			window.AnyResizeEvent = Main;
-		}
-		if (typeof window !== "undefined" && window !== null) {
-			window.anyResizeEvent = new Main();
-		}
-	}
-}).call(this);
-/*jshint +W083 */
-
+(function(){var e;e=function(){function e(e){this.o=null!=e?e:{},window.isAnyResizeEventInited||(this.vars(),this.redefineProto())}return e.prototype.vars=function(){return window.isAnyResizeEventInited=!0,this.allowedProtos=[HTMLDivElement,HTMLFormElement,HTMLLinkElement,HTMLBodyElement,HTMLParagraphElement,HTMLFieldSetElement,HTMLLegendElement,HTMLLabelElement,HTMLButtonElement,HTMLUListElement,HTMLOListElement,HTMLLIElement,HTMLHeadingElement,HTMLQuoteElement,HTMLPreElement,HTMLBRElement,HTMLFontElement,HTMLHRElement,HTMLModElement,HTMLParamElement,HTMLMapElement,HTMLTableElement,HTMLTableCaptionElement,HTMLImageElement,HTMLTableCellElement,HTMLSelectElement,HTMLInputElement,HTMLTextAreaElement,HTMLAnchorElement,HTMLObjectElement,HTMLTableColElement,HTMLTableSectionElement,HTMLTableRowElement],this.timerElements={img:1,textarea:1,input:1,embed:1,object:1,svg:1,canvas:1,tr:1,tbody:1,thead:1,tfoot:1,a:1,select:1,option:1,optgroup:1,dl:1,dt:1,br:1,basefont:1,font:1,col:1,iframe:1}},e.prototype.redefineProto=function(){var e,t,n,o;return t=this,o=function(){var o,i,r,a;for(r=this.allowedProtos,a=[],e=o=0,i=r.length;i>o;e=++o)n=r[e],null!=n.prototype&&a.push(function(e){var n,o;return n=e.prototype.addEventListener||e.prototype.attachEvent,function(n){var o;return o=function(){var e;return(this!==window||this!==document)&&(e="onresize"===arguments[0]&&!this.isAnyResizeEventInited,e&&t.handleResize({args:arguments,that:this})),n.apply(this,arguments)},e.prototype.addEventListener?e.prototype.addEventListener=o:e.prototype.attachEvent?e.prototype.attachEvent=o:void 0}(n),o=e.prototype.removeEventListener||e.prototype.detachEvent,function(t){var n;return n=function(){return this.isAnyResizeEventInited=!1,this.iframe&&this.removeChild(this.iframe),t.apply(this,arguments)},e.prototype.removeEventListener?e.prototype.removeEventListener=n:e.prototype.detachEvent?e.prototype.detachEvent=wrappedListener:void 0}(o)}(n));return a}.call(this)},e.prototype.handleResize=function(e){var t,n,o,i,r,a;return n=e.that,this.timerElements[n.tagName.toLowerCase()]?this.initTimer(n):(o=document.createElement("iframe"),n.appendChild(o),o.style.width="100%",o.style.height="100%",o.style.position="absolute",o.style.zIndex=-999,o.style.opacity=0,o.style.top=0,o.style.left=0,t=window.getComputedStyle?getComputedStyle(n):n.currentStyle,r="static"===t.position&&""===n.style.position,i=""===t.position&&""===n.style.position,(r||i)&&(n.style.position="relative"),null!=(a=o.contentWindow)&&(a.onresize=function(e){return function(){return e.dispatchEvent(n)}}(this)),n.iframe=o),n.isAnyResizeEventInited=!0},e.prototype.initTimer=function(e){var t,n;return n=0,t=0,this.interval=setInterval(function(o){return function(){var i,r;return r=e.offsetWidth,i=e.offsetHeight,r!==n||i!==t?(o.dispatchEvent(e),n=r,t=i):void 0}}(this),this.o.interval||200)},e.prototype.dispatchEvent=function(e){var t;return document.createEvent?(t=document.createEvent("HTMLEvents"),t.initEvent("onresize",!1,!1),e.dispatchEvent(t)):document.createEventObject?(t=document.createEventObject(),e.fireEvent("onresize",t)):!1},e.prototype.destroy=function(){var e,t,n,o,i,r,a;for(clearInterval(this.interval),this.interval=null,window.isAnyResizeEventInited=!1,t=this,r=this.allowedProtos,a=[],e=o=0,i=r.length;i>o;e=++o)n=r[e],null!=n.prototype&&a.push(function(e){var t;return t=e.prototype.addEventListener||e.prototype.attachEvent,e.prototype.addEventListener?e.prototype.addEventListener=Element.prototype.addEventListener:e.prototype.attachEvent&&(e.prototype.attachEvent=Element.prototype.attachEvent),e.prototype.removeEventListener?e.prototype.removeEventListener=Element.prototype.removeEventListener:e.prototype.detachEvent?e.prototype.detachEvent=Element.prototype.detachEvent:void 0}(n));return a},e}(),"function"==typeof define&&define.amd?define("any-resize-event",[],function(){return new e}):"object"==typeof module&&"object"==typeof module.exports?module.exports=new e:("undefined"!=typeof window&&null!==window&&(window.AnyResizeEvent=e),"undefined"!=typeof window&&null!==window&&(window.anyResizeEvent=new e))}).call(this);
 /*!
  * @license Minigrid v3.1.1 minimal cascading grid layout http://alves.im/minigrid
  * @see {@link https://github.com/henriquea/minigrid}
+ * changed element selection method
+ * passes jshint
  */
 (function(root, document) {
 	"use strict";
@@ -2330,13 +1600,26 @@ MIT License 2014
 		}
 		return a;
 	}
+	var elementsSelector;
+	elementsSelector = function (selector, context, undefined) {
+		var matches = {
+			"#": "getElementById",
+			".": "getElementsByClassName",
+			"@": "getElementsByName",
+			"=": "getElementsByTagName",
+			"*": "querySelectorAll"
+		}
+		[selector[0]];
+		var el = (((context === undefined) ? document : context)[matches](selector.slice(1)));
+		return ((el.length < 2) ? el[0] : el);
+	};
 	var Minigrid = function(props) {
 		var containerEle = props.container instanceof Node ?
 			(props.container) :
-			(document[getElementById](props.container) || document[getElementsByClassName](props.container)[0] || "");
+			(elementsSelector(props.container) || "");
 		var itemsNodeList = props.item instanceof NodeList ?
 			props.item :
-			(containerEle[getElementsByClassName](props.item) || "");
+			(elementsSelector(props.item) || "");
 		this.props = extend(props, {
 			container: containerEle,
 			nodeList: itemsNodeList
@@ -3031,12 +2314,17 @@ MIT License 2014
   return mustache;
 }));
 
-/**
+/*!
  * @app ReadMoreJS
  * @desc Breaks the content of an element to the specified number of words
  * @version 1.0.0
  * @license The MIT License (MIT)
  * @author George Raptis | http://georap.gr
+ * @see {@link https://github.com/georapbox/ReadMore.js/blob/master/src/readMoreJS.js}
+ * changed: rmLink = doc.querySelectorAll('.rm-link');
+ * to: rmLink = doc.getElementsByClassName('rm-link');
+ * changed: var target = doc.querySelectorAll(options.target)
+ * to: var target = elementsSelector(options.target)
  */
 (function (win, doc, undef) {
 	'use strict';
@@ -3073,7 +2361,20 @@ MIT License 2014
 			lessLink: 'read less'
 		};
 		options = RM.helpers.extendObj({}, defaults, options);
-		var target = doc.getElementsByClassName(options.target),
+		var elementsSelector;
+		elementsSelector = function (selector, context, undefined) {
+			var matches = {
+				"#": "getElementById",
+				".": "getElementsByClassName",
+				"@": "getElementsByName",
+				"=": "getElementsByTagName",
+				"*": "querySelectorAll"
+			}
+			[selector[0]];
+			var el = (((context === undefined) ? document : context)[matches](selector.slice(1)));
+			return ((el.length < 2) ? el[0] : el);
+		};
+		var target = elementsSelector(options.target),
 		targetLen = target.length,
 		targetContent,
 		trimmedTargetContent,
@@ -3321,3 +2622,507 @@ MIT License 2014
 	();
 	root.ripple = ripple;
 })("undefined" !== typeof window ? window : this, document);
+
+/**
+ * Generates event when user makes new movement (like a swipe on a touchscreen).
+ * @version 1.2.0
+ * @link https://github.com/Promo/wheel-indicator
+ * @license MIT
+ */
+
+/* global module, window, document */
+
+var WheelIndicator = (function() {
+    function Module(options) {
+        var DEFAULTS = {
+            callback: function(){},
+            elem: document,
+            preventMouse: true
+        };
+
+        this.eventWheel = 'onwheel' in document ? 'wheel' : 'mousewheel';
+        this._options = extend(DEFAULTS, options);
+        this._deltaArray = [ 0, 0, 0 ];
+        this._isAcceleration = false;
+        this._isStopped = true;
+        this._direction = '';
+        this._timer = '';
+        this._isWorking = true;
+
+        var self = this;
+        this._wheelHandler = function(event) {
+            if (self._isWorking) {
+                processDelta.call(self, event);
+
+                if (self._options.preventMouse) {
+                    preventDefault(event);
+                }
+            }
+        };
+
+        addEvent(this._options.elem, this.eventWheel, this._wheelHandler);
+    }
+
+    Module.prototype = {
+        constructor: Module,
+
+        turnOn: function(){
+            this._isWorking = true;
+
+            return this;
+        },
+
+        turnOff: function(){
+            this._isWorking = false;
+
+            return this;
+        },
+
+        setOptions: function(options){
+            this._options = extend(this._options, options);
+
+            return this;
+        },
+
+        getOption: function(option){
+            var neededOption = this._options[option];
+
+            if (neededOption !== undefined) {
+                return neededOption;
+            }
+
+            throw new Error('Unknown option');
+        },
+
+        destroy: function(){
+            removeEvent(this._options.elem, this.eventWheel, this._wheelHandler);
+
+            return this;
+        }
+    };
+
+    function triggerEvent(event){
+        event.direction = this._direction;
+
+        this._options.callback.call(this, event);
+    }
+
+    var getDeltaY = function(event){
+        if (event.wheelDelta && !event.deltaY) {
+            getDeltaY = function(event) {
+                return event.wheelDelta * -1;
+            };
+        } else {
+            getDeltaY = function(event) {
+                return event.deltaY;
+            };
+        }
+
+        return getDeltaY(event);
+    };
+
+    function preventDefault(event){
+        event = event || window.event;
+
+        if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            event.returnValue = false;
+        }
+    }
+
+    function processDelta(event) {
+        var
+            self = this,
+            delta = getDeltaY(event);
+
+        if (delta === 0) return;
+
+        var direction = delta > 0 ? 'down' : 'up',
+            arrayLength = self._deltaArray.length,
+            changedDirection = false,
+            repeatDirection = 0,
+            sustainableDirection, i;
+
+        clearTimeout(self._timer);
+
+        self._timer = setTimeout(function() {
+            self._deltaArray = [ 0, 0, 0 ];
+            self._isStopped = true;
+            self._direction = direction;
+        }, 150);
+
+        //check how many of last three deltas correspond to certain direction
+        for(i = 0; i < arrayLength; i++) {
+            if(self._deltaArray[i] !== 0) {
+                self._deltaArray[i] > 0 ? ++repeatDirection : --repeatDirection;
+            }
+        }
+
+        //if all of last three deltas is greater than 0 or lesser than 0 then direction is switched
+        if (Math.abs(repeatDirection) === arrayLength) {
+            //determine type of sustainable direction
+            //(three positive or negative deltas in a row)
+            sustainableDirection = repeatDirection > 0 ? 'down' : 'up';
+
+            if(sustainableDirection !== self._direction) {
+                //direction is switched
+                changedDirection = true;
+                self._direction = direction;
+            }
+        }
+
+        //if wheel`s moving and current event is not the first in array
+        if (!self._isStopped){
+            if(changedDirection) {
+                self._isAcceleration = true;
+
+                triggerEvent.call(this, event);
+            } else {
+                //check only if movement direction is sustainable
+                if(Math.abs(repeatDirection) === arrayLength) {
+                    //must take deltas to don`t get a bug
+                    //[-116, -109, -103]
+                    //[-109, -103, 1] - new impulse
+
+                    analyzeArray.call(this, event);
+                }
+            }
+        }
+
+        //if wheel is stopped and current delta value is the first in array
+        if (self._isStopped) {
+            self._isStopped = false;
+            self._isAcceleration = true;
+            self._direction = direction;
+
+            triggerEvent.call(this, event);
+        }
+
+        self._deltaArray.shift();
+        self._deltaArray.push(delta);
+    }
+
+    function analyzeArray(event) {
+        var
+            deltaArray0Abs  = Math.abs(this._deltaArray[0]),
+            deltaArray1Abs  = Math.abs(this._deltaArray[1]),
+            deltaArray2Abs  = Math.abs(this._deltaArray[2]),
+            deltaAbs        = Math.abs(getDeltaY(event));
+
+        if((deltaAbs       > deltaArray2Abs) &&
+            (deltaArray2Abs > deltaArray1Abs) &&
+            (deltaArray1Abs > deltaArray0Abs)) {
+
+            if(!this._isAcceleration) {
+                triggerEvent.call(this, event);
+                this._isAcceleration = true;
+            }
+        }
+
+        if((deltaAbs < deltaArray2Abs) &&
+            (deltaArray2Abs <= deltaArray1Abs)) {
+            this._isAcceleration = false;
+        }
+    }
+
+    function addEvent(elem, type, handler){
+        if(elem.addEventListener) {
+            elem.addEventListener(type, handler, false);
+        } else if (elem.attachEvent) {
+            elem.attachEvent('on' + type, handler);
+        }
+    }
+
+    function removeEvent(elem, type, handler) {
+        if (elem.removeEventListener) {
+            elem.removeEventListener(type, handler, false);
+        } else if (elem.detachEvent) {
+            elem.detachEvent('on'+ type, handler);
+        }
+    }
+
+    function extend(defaults, options) {
+        var extended = {},
+            prop;
+
+        for (prop in defaults) {
+            if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
+                extended[prop] = defaults[prop];
+            }
+        }
+
+        for (prop in options) {
+            if (Object.prototype.hasOwnProperty.call(options, prop)) {
+                extended[prop] = options[prop];
+            }
+        }
+
+        return extended;
+    }
+
+    return Module;
+}());
+
+if (typeof exports === 'object') {
+    module.exports = WheelIndicator;
+}
+
+/**
+ *
+ * Version: 2.0.1
+ * Author: Gianluca Guarini
+ * Contact: gianluca.guarini@gmail.com
+ * Website: http://www.gianlucaguarini.com/
+ * Twitter: @gianlucaguarini
+ *
+ * Copyright (c) Gianluca Guarini
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ **/
+/* global jQuery */
+(function(doc, win) {
+  if (typeof doc.createEvent !== 'function') return false // no tap events here
+  // helpers
+  var pointerEvent = function(type) {
+      var lo = type.toLowerCase(),
+        ms = 'MS' + type
+      return navigator.msPointerEnabled ? ms : window.PointerEvent ? lo : false
+    },
+    touchEvent = function(name) {
+      return 'on' + name in window ? name : false
+    },
+    defaults = {
+      useJquery: !win.IGNORE_JQUERY && typeof jQuery !== 'undefined',
+      swipeThreshold: win.SWIPE_THRESHOLD || 100,
+      tapThreshold: win.TAP_THRESHOLD || 150, // range of time where a tap event could be detected
+      dbltapThreshold: win.DBL_TAP_THRESHOLD || 200, // delay needed to detect a double tap
+      longtapThreshold: win.LONG_TAP_THRESHOLD || 1000, // delay needed to detect a long tap
+      tapPrecision: win.TAP_PRECISION / 2 || 60 / 2, // touch events boundaries ( 60px by default )
+      justTouchEvents: win.JUST_ON_TOUCH_DEVICES
+    },
+    // was initially triggered a "touchstart" event?
+    wasTouch = false,
+    touchevents = {
+      touchstart: touchEvent('touchstart') || pointerEvent('PointerDown'),
+      touchend: touchEvent('touchend') || pointerEvent('PointerUp'),
+      touchmove: touchEvent('touchmove') || pointerEvent('PointerMove')
+    },
+    isTheSameFingerId = function(e) {
+      return !e.pointerId || typeof pointerId === 'undefined' || e.pointerId === pointerId
+    },
+    setListener = function(elm, events, callback) {
+      var eventsArray = events.split(' '),
+        i = eventsArray.length
+
+      while (i--) {
+        elm.addEventListener(eventsArray[i], callback, false)
+      }
+    },
+    getPointerEvent = function(event) {
+      return event.targetTouches ? event.targetTouches[0] : event
+    },
+    getTimestamp = function () {
+      return new Date().getTime()
+    },
+    sendEvent = function(elm, eventName, originalEvent, data) {
+      var customEvent = doc.createEvent('Event')
+      customEvent.originalEvent = originalEvent
+      data = data || {}
+      data.x = currX
+      data.y = currY
+      data.distance = data.distance
+
+      // jquery
+      if (defaults.useJquery) {
+        customEvent = jQuery.Event(eventName, {originalEvent: originalEvent})
+        jQuery(elm).trigger(customEvent, data)
+      }
+
+      // addEventListener
+      if (customEvent.initEvent) {
+        for (var key in data) {
+          customEvent[key] = data[key]
+        }
+
+        customEvent.initEvent(eventName, true, true)
+        elm.dispatchEvent(customEvent)
+      }
+
+      // detect all the inline events
+      // also on the parent nodes
+      while (elm) {
+        // inline
+        if (elm['on' + eventName])
+          elm['on' + eventName](customEvent)
+        elm = elm.parentNode
+      }
+
+    },
+
+    onTouchStart = function(e) {
+      /**
+       * Skip all the mouse events
+       * events order:
+       * Chrome:
+       *   touchstart
+       *   touchmove
+       *   touchend
+       *   mousedown
+       *   mousemove
+       *   mouseup <- this must come always after a "touchstart"
+       *
+       * Safari
+       *   touchstart
+       *   mousedown
+       *   touchmove
+       *   mousemove
+       *   touchend
+       *   mouseup <- this must come always after a "touchstart"
+       */
+
+      if (!isTheSameFingerId(e)) return
+
+      pointerId = e.pointerId
+
+      // it looks like it was a touch event!
+      if (e.type !== 'mousedown')
+        wasTouch = true
+
+      // skip this event we don't need to track it now
+      if (e.type === 'mousedown' && wasTouch) return
+
+      var pointer = getPointerEvent(e)
+
+      // caching the current x
+      cachedX = currX = pointer.pageX
+      // caching the current y
+      cachedY = currY = pointer.pageY
+
+      longtapTimer = setTimeout(function() {
+        sendEvent(e.target, 'longtap', e)
+        target = e.target
+      }, defaults.longtapThreshold)
+
+      // we will use these variables on the touchend events
+      timestamp = getTimestamp()
+
+      tapNum++
+
+    },
+    onTouchEnd = function(e) {
+
+      if (!isTheSameFingerId(e)) return
+
+      pointerId = undefined
+
+      // skip the mouse events if previously a touch event was dispatched
+      // and reset the touch flag
+      if (e.type === 'mouseup' && wasTouch) {
+        wasTouch = false
+        return
+      }
+
+      var eventsArr = [],
+        now = getTimestamp(),
+        deltaY = cachedY - currY,
+        deltaX = cachedX - currX
+
+      // clear the previous timer if it was set
+      clearTimeout(dblTapTimer)
+      // kill the long tap timer
+      clearTimeout(longtapTimer)
+
+      if (deltaX <= -defaults.swipeThreshold)
+        eventsArr.push('swiperight')
+
+      if (deltaX >= defaults.swipeThreshold)
+        eventsArr.push('swipeleft')
+
+      if (deltaY <= -defaults.swipeThreshold)
+        eventsArr.push('swipedown')
+
+      if (deltaY >= defaults.swipeThreshold)
+        eventsArr.push('swipeup')
+
+      if (eventsArr.length) {
+        for (var i = 0; i < eventsArr.length; i++) {
+          var eventName = eventsArr[i]
+          sendEvent(e.target, eventName, e, {
+            distance: {
+              x: Math.abs(deltaX),
+              y: Math.abs(deltaY)
+            }
+          })
+        }
+        // reset the tap counter
+        tapNum = 0
+      } else {
+
+        if (
+          cachedX >= currX - defaults.tapPrecision &&
+          cachedX <= currX + defaults.tapPrecision &&
+          cachedY >= currY - defaults.tapPrecision &&
+          cachedY <= currY + defaults.tapPrecision
+        ) {
+          if (timestamp + defaults.tapThreshold - now >= 0)
+          {
+            // Here you get the Tap event
+            sendEvent(e.target, tapNum >= 2 && target === e.target ? 'dbltap' : 'tap', e)
+            target= e.target
+          }
+        }
+
+        // reset the tap counter
+        dblTapTimer = setTimeout(function() {
+          tapNum = 0
+        }, defaults.dbltapThreshold)
+
+      }
+    },
+    onTouchMove = function(e) {
+      if (!isTheSameFingerId(e)) return
+      // skip the mouse move events if the touch events were previously detected
+      if (e.type === 'mousemove' && wasTouch) return
+
+      var pointer = getPointerEvent(e)
+      currX = pointer.pageX
+      currY = pointer.pageY
+    },
+    tapNum = 0,
+    pointerId, currX, currY, cachedX, cachedY, timestamp, target, dblTapTimer, longtapTimer
+
+  //setting the events listeners
+  // we need to debounce the callbacks because some devices multiple events are triggered at same time
+  setListener(doc, touchevents.touchstart + (defaults.justTouchEvents ? '' : ' mousedown'), onTouchStart)
+  setListener(doc, touchevents.touchend + (defaults.justTouchEvents ? '' : ' mouseup'), onTouchEnd)
+  setListener(doc, touchevents.touchmove + (defaults.justTouchEvents ? '' : ' mousemove'), onTouchMove)
+
+  // Configure the tocca default options at any time
+  win.tocca = function(options) {
+    for (var opt in options) {
+      defaults[opt] = options[opt]
+    }
+
+    return defaults
+  }
+})(document, window)

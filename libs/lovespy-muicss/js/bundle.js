@@ -290,7 +290,7 @@ QRCode, require, ripple, t, twttr, unescape, VK, WheelIndicator, Ya*/
 				(_this.body || _this.head)[appendChild](script);
 			}
 		};
-				var i,
+		var i,
 		l;
 		for (i = 0, l = _this.files[_length]; i < l; i += 1) {
 			if ((/\.js$|\.js\?/).test(_this.files[i])) {

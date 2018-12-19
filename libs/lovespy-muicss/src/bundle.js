@@ -341,6 +341,13 @@ QRCode, require, ripple, t, twttr, unescape, VK, WheelIndicator, Ya*/
 
 	docBody[classList].add("hide-sidedrawer");
 
+	var toStringFn = {}.toString;
+	var supportsSvgSmilAnimation = !!document[createElementNS] && (/SVGAnimate/).test(toStringFn.call(document[createElementNS]("http://www.w3.org/2000/svg", "animate"))) || "";
+
+	if (supportsSvgSmilAnimation && docElem) {
+		docElem[classList].add("svganimate");
+	}
+
 	var hasTouch = "ontouchstart" in docElem || "";
 
 	var hasWheel = "onwheel" in document[createElement]("div") || void 0 !== document.onmousewheel || "";
@@ -1004,10 +1011,8 @@ QRCode, require, ripple, t, twttr, unescape, VK, WheelIndicator, Ya*/
 			}
 		};
 
-		var manageIframeLightboxLinkAll = function (scope) {
-			var ctx = scope && scope.nodeName ? scope : "";
-			var linkClass = "iframe-lightbox-link";
-			var link = ctx ? ctx[getElementsByClassName](linkClass) || "" : document[getElementsByClassName](linkClass) || "";
+		var manageIframeLightboxLinkAll = function (linkClass) {
+			var link = document[getElementsByClassName](linkClass) || "";
 			var arrange = function (e) {
 				var iframeLightboxLinkIsBindedClass = "iframe-lightbox-link--is-binded";
 				if (!e[classList].contains(iframeLightboxLinkIsBindedClass)) {
@@ -1035,10 +1040,9 @@ QRCode, require, ripple, t, twttr, unescape, VK, WheelIndicator, Ya*/
 			}
 		};
 
-		var manageImgLightboxLinkAll = function (scope) {
-			var ctx = scope && scope.nodeName ? scope : "";
+		var manageImgLightboxLinkAll = function (linkClass) {
 			if (root.imgLightbox) {
-				imgLightbox(ctx, {
+				imgLightbox(linkClass, {
 					onCreated: function () {
 						LoadingSpinner.show();
 					},
@@ -1047,7 +1051,7 @@ QRCode, require, ripple, t, twttr, unescape, VK, WheelIndicator, Ya*/
 					},
 					onError: function () {
 						LoadingSpinner.hide();
-					},
+					}
 				});
 			}
 		};
@@ -2184,8 +2188,8 @@ QRCode, require, ripple, t, twttr, unescape, VK, WheelIndicator, Ya*/
 					if (appContentParent) {
 						managePrevNextLinks(jsonObj);
 						manageExternalLinkAll(appContentParent);
-						manageImgLightboxLinkAll(appContentParent);
-						manageIframeLightboxLinkAll(appContentParent);
+						manageImgLightboxLinkAll("img-lightbox-link");
+						manageIframeLightboxLinkAll("iframe-lightbox-link");
 						manageDropdownButtonAll(appContentParent);
 						manageHljsCodeAll(appContentParent);
 						manageRippleEffect();
@@ -2241,9 +2245,9 @@ QRCode, require, ripple, t, twttr, unescape, VK, WheelIndicator, Ya*/
 	/* var scripts = [
 				"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
 				"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
-				"./bower_components/mui/src/sass/mui.css",
-				"./bower_components/iframe-lightbox/iframe-lightbox.css",
-				"./bower_components/img-lightbox/img-lightbox.css"
+				"../../cdn/mui/0.9.39/css/mui.css",
+				"../../cdn/iframe-lightbox/0.2.4/css/iframe-lightbox.fixed.css",
+				"../../cdn/img-lightbox/0.1.7/css/img-lightbox.fixed.css"
 	]; */
 
 	var scripts = [
@@ -2297,14 +2301,14 @@ QRCode, require, ripple, t, twttr, unescape, VK, WheelIndicator, Ya*/
 
 	/* var scripts = [
 				"./bower_components/iframe-lightbox/iframe-lightbox.js",
-				"./bower_components/img-lightbox/img-lightbox.js",
-				"./bower_components/qrjs2/qrjs2.js",
-				"./bower_components/Tocca.js/Tocca.js",
-				"./bower_components/wheel-indicator/lib/wheel-indicator.js",
-				"./node_modules/any-resize-event/dist/any-resize-event.js",
+				"../../cdn/img-lightbox/0.1.7/js/img-lightbox.fixed.js",
+				"../../cdn/qrjs2/0.1.7/js/qrjs2.fixed.js",
+				"../../cdn/Tocca.js/2.0.1/js/Tocca.fixed.js",
+				"../../cdn/wheel-indicator/1.1.4/js/wheel-indicator.fixed.js",
+				"../../cdn/resize/1.0.0/js/any-resize-event.fixed.js",
 				"./node_modules/macy/dist/macy.js",
-				"./node_modules/mustache/mustache.js",
-				"./node_modules/wolfy87-eventemitter/EventEmitter.js",
+				"../../cdn/mustache/2.3.0/js/mustache.fixed.js",
+				"../../cdn/EventEmitter/5.2.5/js/EventEmitter.fixed.js",,
 				"../../cdn/minigrid/3.1.1/js/minigrid.fixed.js",
 				"../../cdn/ripple-js/1.4.4/js/ripple.fixed.js",
 				"../../cdn/ReadMore.js/1.0.0/js/readMoreJS.fixed.js"

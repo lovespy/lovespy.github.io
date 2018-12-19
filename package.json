@@ -1,15 +1,15 @@
 {
 	"name": "lovespy",
 	"productName": "lovespy",
-	"companyName": "englishextra.github.io",
+	"companyName": "lovespy.github.io",
 	"version": "0.1.0",
-	"description": "A web-developer portfolio",
+	"description": "Tutor of English in Tushino Portfolio",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/lovespy/lovespy.github.io.git"
+		"url": "https://gitlab.com/lovespy/lovespy.github.io.git"
 	},
 	"email": "englishextra@mail.ru",
-	"url": "https://github.com/lovespy/lovespy.github.io/issues",
+	"url": "https://gitlab.com/lovespy/lovespy.github.io/issues",
 	"main_file": "index.js",
 	"electronVersion": "1.6.11",
 	"dependencies": {
@@ -71,7 +71,7 @@
 	},
 	"main": "index.html",
 	"window": {
-		"title": "Портфолио lovespy",
+		"title": "РђРЅРіР»РёР№СЃРєРёР№ РІ РўСѓС€РёРЅРѕ",
 		"icon": "favicon-32x32.png",
 		"toolbar": true,
 		"frame": true,

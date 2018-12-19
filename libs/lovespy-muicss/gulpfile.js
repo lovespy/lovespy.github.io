@@ -5,7 +5,7 @@
  * @see {@link https://gulpjs.com/plugins/blackList.json}
  * @see {@link https://hackernoon.com/how-to-automate-all-the-things-with-gulp-b21a3fc96885}
  */
-var currentLibName = "mytushino-muicss";
+var currentLibName = "lovespy-muicss";
 
 var getTimestamp = function () {
 	var dateTime = Date.now();
@@ -15,9 +15,9 @@ var getTimestamp = function () {
 var gulp = require("gulp");
 var plumber = require("gulp-plumber");
 var sass = require("gulp-sass");
-var minifyCss = require("gulp-minify-css");
+var minifyCss = require("gulp-clean-css");
 var uglify = require("gulp-uglify");
-var sourcemaps = require('gulp-sourcemaps');
+var sourcemaps = require("gulp-sourcemaps");
 var rename = require("gulp-rename");
 var replace = require("gulp-replace");
 var concat = require("gulp-concat");
@@ -170,12 +170,13 @@ var options = {
 	},
 	vendors: {
 		src: [
+			"../../cdn/macy.js/2.3.1/js/macy.fixed.js",
 			"../../cdn/minigrid/3.1.1/js/minigrid.fixed.js",
 			"../../cdn/ReadMore.js/1.0.0/js/readMoreJS.fixed.js",
 			"../../cdn/ripple-js/1.4.4/js/ripple.fixed.js",
-			"../../cdn/iframe-lightbox/0.2.2/js/iframe-lightbox.fixed.js",
-			"../../cdn/img-lightbox/0.1.2/js/img-lightbox.fixed.js",
-			"../../cdn/qrjs2/0.1.6/js/qrjs2.fixed.js",
+			"../../cdn/iframe-lightbox/0.2.4/js/iframe-lightbox.fixed.js",
+			"../../cdn/img-lightbox/0.1.7/js/img-lightbox.fixed.js",
+			"../../cdn/qrjs2/0.1.7/js/qrjs2.fixed.js",
 			"../../cdn/Tocca.js/2.0.1/js/Tocca.fixed.js",
 			"../../cdn/wheel-indicator/1.1.4/js/wheel-indicator.fixed.js",
 			"../../cdn/resize/1.0.0/js/any-resize-event.fixed.js",
@@ -186,8 +187,8 @@ var options = {
 		scss: [
 			"../../fonts/roboto-fontfacekit/2.137/css/roboto.css",
 			"../../fonts/roboto-mono-fontfacekit/2.0.986/css/roboto-mono.css",
-			"../../cdn/iframe-lightbox/0.2.2/css/iframe-lightbox.fixed.css",
-			"../../cdn/img-lightbox/0.1.2/css/img-lightbox.fixed.css",
+			"../../cdn/iframe-lightbox/0.2.4/css/iframe-lightbox.fixed.css",
+			"../../cdn/img-lightbox/0.1.7/css/img-lightbox.fixed.css",
 			"../../cdn/mui/0.9.39/css/mui.css"
 		],
 		css: "./css",

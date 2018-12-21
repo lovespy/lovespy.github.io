@@ -5,7 +5,7 @@
  * @see {@link https://github.com/pwa-builder/serviceworkers/pull/28}
  */
 //This is the "Offline copy of pages" service worker
-var cacheName = "lovespy-muicss-offline-v1545260564"; //Install stage sets up the index page (home page) in the cache and opens a new cache
+var cacheName = "lovespy-muicss-offline-v1545427587"; //Install stage sets up the index page (home page) in the cache and opens a new cache
 
 self.addEventListener("install", function(event) {
 	var indexPage = new Request("index.html");

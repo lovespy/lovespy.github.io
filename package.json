@@ -1,15 +1,20 @@
 {
 	"name": "lovespy",
-	"productName": "lovespy",
-	"companyName": "lovespy.gitlab.io",
 	"version": "0.1.0",
 	"description": "A Portfolio Web App",
+	"keywords": [
+		"spa",
+		"pwa",
+		"webapp"
+	],
+	"main_file": "index.js",
+	"electronVersion": "4.0.0",
 	"repository": {
 		"type": "git",
 		"url": "https://gitlab.com/lovespy/lovespy.gitlab.io.git"
 	},
 	"dependencies": {
-		"npm": "^6.5.0"
+		"npm": "^6.6.0"
 	},
 	"devDependencies": {
 		"gulp": "^4.0.0",

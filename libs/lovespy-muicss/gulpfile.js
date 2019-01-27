@@ -142,6 +142,9 @@ var csslintOptions = {
 		"merge-default-rules": false,
 		"max-warnings": 50
 	},
+	"files": {
+		"ignore": ["scss/_font-face.scss"]
+	},
 	"rules": {
 		"attribute-quotes": 0,
 		"border-zero": 0,
@@ -320,14 +323,13 @@ gulp.task("compile-material-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
-	.pipe(gulp.dest(options.material.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.material.css));
+	.pipe(gulp.dest(options.material.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-roboto-css", function () {
@@ -340,14 +342,14 @@ gulp.task("compile-roboto-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.roboto.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.roboto.css));
+	.pipe(gulp.dest(options.roboto.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-roboto-mono-css", function () {
@@ -360,14 +362,14 @@ gulp.task("compile-roboto-mono-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.robotomono.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.robotomono.css));
+	.pipe(gulp.dest(options.robotomono.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-libbundle-css", function () {
@@ -380,14 +382,14 @@ gulp.task("compile-libbundle-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.libbundle.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.libbundle.css));
+	.pipe(gulp.dest(options.libbundle.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("lint-libbundle-css", function () {
@@ -404,7 +406,6 @@ gulp.task("compile-libbundle-js", function () {
 	.pipe(babel(babelOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.libbundle.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -412,7 +413,8 @@ gulp.task("compile-libbundle-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.libbundle.js));
+	.pipe(gulp.dest(options.libbundle.js))
+	.pipe(plumber.stop());
 });
 
 gulp.task("lint-libbundle-js", function () {
@@ -433,14 +435,14 @@ gulp.task("compile-vendors-css", function () {
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
 	.pipe(concat(options.vendors.concatOptions.css))
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.vendors.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.vendors.css));
+	.pipe(gulp.dest(options.vendors.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-vendors-js", function () {
@@ -451,7 +453,6 @@ gulp.task("compile-vendors-js", function () {
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
 	.pipe(concat(options.vendors.concatOptions.js))
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.vendors.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -459,7 +460,8 @@ gulp.task("compile-vendors-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.vendors.js));
+	.pipe(gulp.dest(options.vendors.js))
+	.pipe(plumber.stop());
 });
 
 gulp.task("lint-vendors-js", function () {
@@ -479,14 +481,14 @@ gulp.task("compile-muicss-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.muicss.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.muicss.css));
+	.pipe(gulp.dest(options.muicss.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-highlightjs-css", function () {
@@ -499,14 +501,14 @@ gulp.task("compile-highlightjs-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.highlightjs.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.highlightjs.css));
+	.pipe(gulp.dest(options.highlightjs.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-highlightjs-js", function () {
@@ -516,7 +518,6 @@ gulp.task("compile-highlightjs-js", function () {
 	.pipe(babel(babelOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.highlightjs.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -524,7 +525,8 @@ gulp.task("compile-highlightjs-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.highlightjs.js));
+	.pipe(gulp.dest(options.highlightjs.js))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-img-lightbox-css", function () {
@@ -537,14 +539,14 @@ gulp.task("compile-img-lightbox-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.imglightbox.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.imglightbox.css));
+	.pipe(gulp.dest(options.imglightbox.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-img-lightbox-js", function () {
@@ -554,7 +556,6 @@ gulp.task("compile-img-lightbox-js", function () {
 	.pipe(babel(babelOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.imglightbox.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -562,7 +563,8 @@ gulp.task("compile-img-lightbox-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.imglightbox.js));
+	.pipe(gulp.dest(options.imglightbox.js))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-iframe-lightbox-css", function () {
@@ -575,14 +577,14 @@ gulp.task("compile-iframe-lightbox-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.iframelightbox.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.iframelightbox.css));
+	.pipe(gulp.dest(options.iframelightbox.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-iframe-lightbox-js", function () {
@@ -592,7 +594,6 @@ gulp.task("compile-iframe-lightbox-js", function () {
 	.pipe(babel(babelOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.iframelightbox.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -600,7 +601,8 @@ gulp.task("compile-iframe-lightbox-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.iframelightbox.js));
+	.pipe(gulp.dest(options.iframelightbox.js))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-lightgalleryjs-css", function () {
@@ -613,14 +615,14 @@ gulp.task("compile-lightgalleryjs-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.lightgalleryjs.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.lightgalleryjs.css));
+	.pipe(gulp.dest(options.lightgalleryjs.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-lightgalleryjs-js", function () {
@@ -630,7 +632,6 @@ gulp.task("compile-lightgalleryjs-js", function () {
 	.pipe(babel(babelOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.lightgalleryjs.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -638,7 +639,8 @@ gulp.task("compile-lightgalleryjs-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.lightgalleryjs.js));
+	.pipe(gulp.dest(options.lightgalleryjs.js))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-lightgalleryjs-plugins-js", function () {
@@ -649,7 +651,7 @@ gulp.task("compile-lightgalleryjs-plugins-js", function () {
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
 	.pipe(concat(options.lightgalleryjs.plugins.concatOptions.js))
-	.pipe(plumber.stop())
+	.pipe(concat(options.lightgalleryjs.plugins.concatOptions.js))
 	.pipe(gulp.dest(options.lightgalleryjs.plugins.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -657,7 +659,8 @@ gulp.task("compile-lightgalleryjs-plugins-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.lightgalleryjs.plugins.js));
+	.pipe(gulp.dest(options.lightgalleryjs.plugins.js))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-glightbox-css", function () {
@@ -670,14 +673,14 @@ gulp.task("compile-glightbox-css", function () {
 	.pipe(autoprefixer(autoprefixerOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.glightbox.css))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
 		}))
 	.pipe(minifyCss(cleanCssOptions))
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.glightbox.css));
+	.pipe(gulp.dest(options.glightbox.css))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-glightbox-js", function () {
@@ -687,7 +690,6 @@ gulp.task("compile-glightbox-js", function () {
 	.pipe(babel(babelOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.glightbox.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -695,7 +697,8 @@ gulp.task("compile-glightbox-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.glightbox.js));
+	.pipe(gulp.dest(options.glightbox.js))
+	.pipe(plumber.stop());
 });
 
 gulp.task("compile-pwabuilder-serviceworkers-js", function () {
@@ -710,7 +713,6 @@ gulp.task("compile-pwabuilder-serviceworkers-js", function () {
 	.pipe(babel(babelOptions))
 	.pipe(prettier(prettierOptions))
 	/* .pipe(beautify(beautifyOptions)) */
-	.pipe(plumber.stop())
 	.pipe(gulp.dest(options.pwabuilderServiceworkers.js))
 	.pipe(rename(function (path) {
 			path.basename += ".min";
@@ -718,7 +720,8 @@ gulp.task("compile-pwabuilder-serviceworkers-js", function () {
 	.pipe(stripDebug())
 	.pipe(uglify())
 	.pipe(sourcemaps.write("."))
-	.pipe(gulp.dest(options.pwabuilderServiceworkers.js));
+	.pipe(gulp.dest(options.pwabuilderServiceworkers.js))
+	.pipe(plumber.stop());
 });
 
 /*!

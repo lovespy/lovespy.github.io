@@ -1897,7 +1897,7 @@ function _typeof(obj) {
 				};
 
 				img.src = dummySrc;
-				container[style].display = "none";
+				setStyleDisplayNone(container);
 				callCallback(callback, root);
 			};
 
@@ -2015,7 +2015,7 @@ function _typeof(obj) {
 					};
 
 					img.src = hrefString;
-					container[style].display = "block";
+					setStyleDisplayBlock(container);
 				};
 
 				debounce(logic, rate).call();

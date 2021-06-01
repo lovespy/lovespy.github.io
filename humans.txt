@@ -1,0 +1,17 @@
+/* TEAM */
+
+	Editor:
+		Serguei Shimansky
+
+	Site:
+		https://lovespy.github.io/
+
+	Location:
+		Europe/Moscow
+
+/* SITE */
+
+	Content:
+
+		English Grammar for Russian-Speakers.
+

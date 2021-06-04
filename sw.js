@@ -5,7 +5,7 @@
  * This is a reworked code of the "Offline copy of pages" service worker
  */
 <<<<<<< HEAD
-var cacheName = "lovespy-muicss-offline-v1602190277";
+var cacheName = "lovespy-muicss-offline-v1602190278";
 =======
 var cacheName = "lovespy-muicss-offline-v1602190229";
 >>>>>>> b7fdc5d274f3bca45e412f66fe394cce057e0c87
